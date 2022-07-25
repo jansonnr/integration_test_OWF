@@ -1,3 +1,4 @@
+
 class UserRepository:
 
     def __init__(self, connection):
@@ -6,17 +7,17 @@ class UserRepository:
     def get_users(self) -> list:
         with self.connection.cursor() as cursor:
             cursor.execute('SELECT * FROM users')
-            records = cursor.fetcnall()
+            records = cursor.fetchall()
 
             users = list()
             for row in records:
                 users.append({
                     'id': row[0],
-                    'first_name': row[2],
-                    'last_name': row[3],
-                    'pytronymic': row[4],
-                    'email': row[5],
-                    'phone_number': row[6]
+                    'first_name': row[1],
+                    'last_name': row[2],
+                    'patronymic': row[3],
+                    'email': row[4],
+                    'phone_number': row[5]
                 })
 
             return users
