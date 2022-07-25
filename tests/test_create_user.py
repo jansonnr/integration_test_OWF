@@ -1,8 +1,10 @@
 import psycopg2
+import pytest
+
 from config import APP_BASE_URL, DB_CONNECTION_PARAMS
 from app_driver.owf_http_client import OwfHttpClient
-from test_data.create_user import SCENARIO
-from app_driver.user_repository import UserRepository
+from test_data.create_user import test_data
+from app_driver.db_users import UserRepository
 
 
 class TestSuccessCreateUser:
@@ -20,17 +22,13 @@ class TestSuccessCreateUser:
 
     def test_register(self):
         # Act
-        register_response = self.client.register(SCENARIO)
+        register_response = self.client.register(test_data.get('register_data'))
 
         # Assert
         assert register_response.status_code == 200
 
     def test_login(self):
-        login_data = {
-            'email': SCENARIO['email'],
-            'password': SCENARIO['password']
-        }
-        login_response = self.client.login(login_data)
+        login_response = self.client.login(test_data.get('login_data'))
         # Assert
         assert login_response.status_code == 200
 
