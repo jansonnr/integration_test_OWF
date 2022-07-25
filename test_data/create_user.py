@@ -1,5 +1,5 @@
 SCENARIO = {
-    "email": "ex660e9@yahoo.com",
+    "email": "ex6e49@yahoo.com",
     "password": "Test123456",
     "confirmPassword": "Test123456",
     "lastName": "Иванов",

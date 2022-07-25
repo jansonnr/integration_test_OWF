@@ -37,5 +37,8 @@ class TestSuccessCreateUser:
     def test_get_user_data(self):
         self.user_repository.get_users()
 
+    def test_cleaner_bd(self):
+        self.user_repository.delete_users()
+
     def teardown(self):
         self.connection.close()
