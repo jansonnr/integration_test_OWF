@@ -22,5 +22,5 @@ class UserRepository:
 
     def delete_users(self):
         cursor = self.connection.cursor()
-        cursor.execute('DELETE FROM aspnetusers')
+        cursor.execute('DELETE FROM "AspNetUsers"')
         self.connection.commit()
