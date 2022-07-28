@@ -1,46 +1,29 @@
-import psycopg2
 import pytest
 
-from config import APP_BASE_URL, DB_CONNECTION_PARAMS
-from app_driver.owf_http_client import OwfHttpClient
-from test_data.create_user import data_create_user
-from app_driver.db_users import UserRepository
-from tests.context import TestContext
+from test_data.Identity_data import VALID_REGISTER_DATA
+from test_logic.db_sort import DBSort
 
 
-@pytest.mark.parametrize('register_data', data_create_user, scope="class")
+@pytest.mark.incremental
+@pytest.mark.usefixtures('http_client', 'db_connect', 'del_user_bd')
+@pytest.mark.parametrize('valid_register_data', VALID_REGISTER_DATA, scope="class")
 class TestSuccessCreateUser:
 
-    def setup_class(self):
-        self.client = OwfHttpClient(APP_BASE_URL)
-        self.connection = psycopg2.connect(
-            dbname=DB_CONNECTION_PARAMS.get('dbname'),
-            user=DB_CONNECTION_PARAMS.get('user'),
-            password=DB_CONNECTION_PARAMS.get('password'),
-            host=DB_CONNECTION_PARAMS.get('host')
-        )
-
-        self.user_repository = UserRepository(self.connection)
-
-    def test_register(self, register_data):
+    def test_register(self, http_client, valid_register_data):
         # Act
-        register_response = self.client.register(register_data.get('register'))
+        register_response = http_client.register(valid_register_data.get('register'))
 
         # Assert
         assert register_response.status_code == 200
 
-    def test_login (self, register_data ):
+    def test_login(self, http_client, valid_register_data):
         # Act
-        register_response = self.client.login(register_data.get('login'))
+        register_response = http_client.login(valid_register_data.get('login'))
 
         # Assert
         assert register_response.status_code == 200
 
-    def test_get_user_data(self, register_data):
-        self.user_repository.get_users()
-
-    def test_cleaner_bd(self, register_data):
-        self.user_repository.delete_users()
-
-    def teardown_class(self):
-        self.connection.close()
+    def test_get_user_data(self, db_connect, valid_register_data):
+        '''users = db_connect.get_users()
+        user = register_data.get_dict
+        assert DBSort().chek_user(users, user('email'))'''
